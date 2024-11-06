@@ -1,0 +1,35 @@
+name: yaci
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  yaci:
+    name: yaci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install YaCI
+        run: |
+          arch=$(uname -m)
+          if [ "$arch" = "x86_64" ]; then
+            curl -sL -o /usr/local/bin/yaci https://github.com/yaci-dev/demo/releases/download/0.0.1/linux_amd64_yaci
+          elif [ "$arch" = "aarch64" ]; then
+            curl -sL -o /usr/local/bin/yaci https://github.com/yaci-dev/demo/releases/download/0.0.1/linux_arm64_yaci
+          else
+            echo "Unsupported architecture: $arch"
+            exit 1
+          fi
+          chmod +x /usr/local/bin/yaci
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: YaCI CI with mvn
+        run: |
+          yaci run --runner docker --file yaci-mvn.yaml
+
+      - name: YaCI CI with gradle
+        run: |
+          yaci run --runner docker --file yaci-gradle.yaml

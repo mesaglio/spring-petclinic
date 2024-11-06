@@ -1,0 +1,8 @@
+pipeline:
+  - name: "ci with mvn"
+    image: "openjdk:17"
+    cache:
+      mvn-cache: "/root/.m2"
+    runs: |
+      ./mvnw package
+      ls -la target/spring-petclinic-3.3.0-SNAPSHOT.jar

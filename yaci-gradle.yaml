@@ -1,0 +1,12 @@
+pipeline:
+  - name: "ci with gradle"
+    image: "openjdk:17"
+    cache:
+      # mvn-cache: "/root/.m2"
+      # gradle: "/cache/gradle/"
+      gradle: "/root/.gradle/"
+    runs: |
+      # mvn package
+      # ls -la target/spring-petclinic-3.3.0-SNAPSHOT.jar
+      microdnf install findutils
+      ./gradlew test

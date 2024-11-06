@@ -23,8 +23,7 @@ func (m *MyModule) BuildGradle(ctx context.Context, source *dagger.Directory) *d
 		WithExec([]string{"microdnf", "install", "git", "findutils"}).
 		// WithMountedCache("/project/.gradle", dag.CacheVolume("gradle-cache")).
 		WithWorkdir("/project").
-		WithMountedDirectory("/project",
-			source.WithoutDirectory("dagger")).
+		WithMountedDirectory("/project", source.WithoutDirectory(".gradle").WithoutDirectory("build").WithoutDirectory("dagger")).
 		WithExec([]string{"./gradlew", "build"}).
 		File("build/libs/spring-petclinic-3.3.0.jar")
 }
